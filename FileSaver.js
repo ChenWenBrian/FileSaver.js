@@ -277,7 +277,15 @@ var saveTextAs = saveTextAs
         }
 
         var doc = saveTxtWindow.document;
-        doc.open('text/plain', 'replace');
+        if ( (navigator.userAgent.indexOf("Windows NT 5.1") > 0) && (!fileName.endsWithAny('.htm', '.html'))) {
+            // If Win XP then set MIME type as "text/plain".
+            // This will keep line feeds in the text and will not include html tags.
+            doc.open('text/plain', 'replace');
+        } else {
+            // In other browsers and OSs use "text/html" to
+            // prevent a file from including html tags.
+            doc.open('text/html', 'replace');
+        }
         doc.charset = charset;
         if (fileName.endsWithAny('.htm', '.html')) {
             doc.close();
